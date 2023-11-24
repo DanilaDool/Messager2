@@ -1,0 +1,97 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* styles.css */
+
+/* ... (ваш существующий CSS) */
+
+header {
+    background-color: #000000;
+    color: #fff;
+    padding: 10px 0;
+    text-align: right;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0; /* Убираем внутренний отступ */
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+    line-height: 40px; /* Выравниваем текст по вертикали */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* ... (ваш существующий CSS) */
+
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.user-profile {
+    text-align: center;
+}
+
+.user-profile img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+}
+
+.user-profile h1 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.user-profile p {
+    font-size: 16px;
+    color: #000000;
+}
+
+.user-profile button {
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.feed {
+    margin-top: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #000000;
+    color: #fff;
+}
+
+.rounded-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-image-div {
+    text-align: center;
+}

@@ -1,0 +1,33 @@
+<%= form_for @user, html: {multipart: true} do |f| %>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.text_field :email, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :descriptions %>
+    <%= f.text_area :descriptions, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :avatar %>
+    <p><%= image_tag(@user.avatar.thumb.url) if @user.avatar? %></p>
+    <%= f.file_field :avatar %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit 'Сохранить', class: 'btn btn-primary'%>
+    или <%= link_to 'вернуться', :back %>
+  </div>
+
+  <div class="actions">
+    <%= link_to 'Изменить пароль', edit_user_registration_path, class: 'btn btn-secondary' %>
+  </div>
+
+<% end %>

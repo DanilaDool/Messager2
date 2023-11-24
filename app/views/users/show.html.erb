@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<main>
+  <section class="user-profile">
+    <% if current_user.avatar?%>
+      <%= image_tag current_user.avatar.url, alt: "Ваш аватар" %>
+    <% else %>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка">
+    <% end %>
+    <h1><%= current_user.name %></h1>
+    <p><%= current_user.descriptions %></p>
+    <%= link_to 'Редактировать профиль', edit_user_path(current_user), class: 'btn' %>
+  </section>
+</main>
+
+</body>
+</html>

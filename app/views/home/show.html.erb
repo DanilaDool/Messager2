@@ -1,0 +1,30 @@
+<% if current_user %>
+  <!DOCTYPE html>
+  <html>
+  <body>
+
+    <div class="header">
+      <div class="search-bar">
+        <input type="text" placeholder="Найти друга">
+      </div>
+    </div>
+
+      <div class="chat-list">
+        <div class="chat">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка" class="rounded-avatar" height="100px" width="100px">
+          <div class="chat-info">
+            <h3>Петя</h3>
+            <p>Последнее сообщение в чате</p>
+          </div>
+        </div>
+      </div>
+  </body>
+  </html>
+
+<% else %>
+  <div class="nocurrent">
+    <div class="text-center">
+      <h3 class="my-auto">Вы не зарегистрированы</h3>
+    </div>
+  </div>
+<% end %>
