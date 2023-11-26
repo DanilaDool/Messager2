@@ -19,7 +19,7 @@
             <% if current_user.pending_friend_requests.exists?(requested_id: user.id) %>
               <span class="friend-request-sent">&#10004; Запрос отправлен</span> <!-- Если запрос уже отправлен -->
             <% else %>
-              <%= form.submit 'Добавить в друзья', class: 'btn btn-primary' %>
+              <%= form.submit 'Добавить в друзья', class: 'btn btn-dark' %>
             <% end %>
           <% end %>
         </div>

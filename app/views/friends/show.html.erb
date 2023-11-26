@@ -1,2 +1,15 @@
-<h1>Friends#show</h1>
-<p>Find me in app/views/friends/show.html.erb</p>
+<h1>Requests for Friendship</h1>
+
+<% if @friend_requests.any? %>
+  <ul>
+    <% @friend_requests.each do |friend_request| %>
+      <li>
+        <%= "From: #{friend_request.user.name}" %>
+        <%= link_to "Accept", accept_friendship_path(friend_request), method: :patch %>
+        <%= link_to "Reject", reject_friendship_path(friend_request), method: :patch %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No pending friend requests</p>
+<% end %>

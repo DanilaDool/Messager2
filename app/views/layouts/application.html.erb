@@ -18,11 +18,11 @@
       <% if current_user %>
         <li><a href="/">Главная</a></li>
         <li><%= link_to 'Профиль', user_profile_path(current_user) %></li>
-        <li><a href="friendship">Найти Друзей</a></li>
-        <li><a href="#w">Друзья</a></li>
+        <li><a href="friendship_status">Найти Друзей</a></li>
+        <li><a href="friends">Друзья</a></li>
       <% else %>
-        <li><a href="users/sign_up">Зарегистрироваться</a></li>
-        <li><a href="users/sign_in">Войти</a></li>
+        <li><%= link_to 'Зарегистрироваться', new_user_registration_path %></li>
+        <li><%= link_to 'Войти', new_user_session_path %></li>
       <% end %>
     </ul>
   </nav>

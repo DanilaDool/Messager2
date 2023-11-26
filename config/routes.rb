@@ -1,17 +1,28 @@
 Rails.application.routes.draw do
+
+  devise_for :users
+
+  devise_scope :user do
+    get '/logout', to: 'devise/sessions#destroy', as: :logout
+    delete '/logout', to: 'devise/sessions#destroy'
+  end
+
   get 'friends/show'
 
   get 'users/:id', to: 'users#show', as: :user_profile
 
   root 'home#show'
 
-  devise_for :users
 
-  resource :friendships, only: [:create]
-  patch '/friendships/:id/accept', to: 'friendships#accept', as: 'accept_friendship'
-  patch '/friendships/:id/reject', to: 'friendships#reject', as: 'reject_friendship'
+  resources :friendships, only: [:create, :update, :destroy] do
+    member do
+      patch :accept, to: 'friendships#accept', as: 'accept'
+      patch :reject, to: 'friendships#reject', as: 'reject'
+    end
+  end
 
   resource :user, only: [:edit, :update]
 
-  get 'friendship', to: 'friendships#show', as: :friendship
+  get 'friendship_status', to: 'friendships#show', as: :friendship_status
+  get 'friends', to: 'friends#show', as: :friend
 end
