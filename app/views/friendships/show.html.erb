@@ -1,0 +1,19 @@
+<div class="content-wrapper buffer-both text-center">
+  <div class="buffer-both">
+    <h1 class="title-medium">Наши пользователи</h1>
+  </div>
+  <div class="user-avatars-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <% @users.each do |user| %>
+      <div class="users-list-item">
+        <div class="user-image-div user-image-div-small" style="margin: 10px;">
+          <% if user.avatar? %>
+            <%= image_tag user.avatar.thumb.url, alt: "#{user.name}'s аватар", class: "rounded-avatar" %>
+          <% else %>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка" class="rounded-avatar" height="100px" width="100px">
+          <% end %>
+          <p><%= user.name %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
