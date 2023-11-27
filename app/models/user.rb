@@ -12,4 +12,8 @@ class User < ApplicationRecord
   def pending_friend_requests
     Friendship.where(requested_id: id, status: 'pending')
   end
+
+  def friends
+    received_friends
+  end
 end

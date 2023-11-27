@@ -14,11 +14,9 @@
           <% end %>
           <p><%= user.name %></p>
 
-          <%= form_with(url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
-            <%= form.hidden_field :requested_id, value: user.id %>
-            <% if current_user.pending_friend_requests.exists?(requested_id: user.id) %>
-              <span class="friend-request-sent">&#10004; Запрос отправлен</span> <!-- Если запрос уже отправлен -->
-            <% else %>
+          <% unless current_user.pending_friend_requests.exists?(requester_id: user.id) %>
+            <%= form_with(model: Friendship.new, url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
+              <%= form.hidden_field :requested_id, value: user.id %>
               <%= form.submit 'Добавить в друзья', class: 'btn btn-dark' %>
             <% end %>
           <% end %>
@@ -28,40 +26,57 @@
   </div>
 </div>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const forms = document.querySelectorAll('.friendship-form');
+        const acceptLinks = document.querySelectorAll('.accept-friendship-link');
+        const rejectLinks = document.querySelectorAll('.reject-friendship-link');
 
-        forms.forEach(form => {
-            form.addEventListener('submit', async (e) => {
+        acceptLinks.forEach(link => {
+            link.addEventListener('click', async (e) => {
                 e.preventDefault();
 
-                const formData = new FormData(form);
+                const friendshipId = link.dataset.friendshipId;
+                const url = `/friendships/${friendshipId}/accept`;
 
                 try {
-                    const response = await fetch(form.action, {
-                        method: form.method,
-                        body: formData
+                    const response = await fetch(url, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
                     });
 
-                    if (response.ok) {
-                        const flashMessages = document.getElementById('flash-messages');
-                        flashMessages.innerHTML = '<div class="flash-success">Запрос на дружбу отправлен успешно</div>';
+                    // Обработка ответа...
+                } catch (error) {
+                    console.error(error);
+                }
+            });
+        });
 
-                        const submitButton = form.querySelector('input[type="submit"]');
-                        submitButton.style.display = 'none';
+        rejectLinks.forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
 
-                        const successMark = form.querySelector('.friend-request-sent');
-                        if (successMark) {
-                            successMark.style.display = 'inline-block';
+                const friendshipId = link.dataset.friendshipId;
+                const url = `/friendships/${friendshipId}/reject`;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
                         }
-                    } else {
-                        throw new Error('Ошибка при отправке запроса на дружбу');
-                    }
+                    });
+
+                    // Обработка ответа...
                 } catch (error) {
                     console.error(error);
                 }
             });
         });
     });
+
 </script>

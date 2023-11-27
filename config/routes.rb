@@ -13,11 +13,10 @@ Rails.application.routes.draw do
 
   root 'home#show'
 
-
   resources :friendships, only: [:create, :update, :destroy] do
     member do
-      patch :accept, to: 'friendships#accept', as: 'accept'
-      patch :reject, to: 'friendships#reject', as: 'reject'
+      patch :accept
+      patch :reject
     end
   end
 

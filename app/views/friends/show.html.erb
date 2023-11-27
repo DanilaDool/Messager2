@@ -4,12 +4,14 @@
   <ul>
     <% @friend_requests.each do |friend_request| %>
       <li>
-        <%= "From: #{friend_request.user.name}" %>
-        <%= link_to "Accept", accept_friendship_path(friend_request), method: :patch %>
-        <%= link_to "Reject", reject_friendship_path(friend_request), method: :patch %>
+        <%= "From: #{friend_request.requester.name}" %>
+        <!-- Обновленные кнопки с классами accept-friendship-link и reject-friendship-link -->
+        <%= button_to 'Accept', accept_friendship_path(friend_request), method: :patch, remote: true, class: 'accept-friendship-link', data: { friendship_id: friend_request.id } %>
+        <%= button_to 'Reject', reject_friendship_path(friend_request), method: :patch, remote: true, class: 'reject-friendship-link', data: { friendship_id: friend_request.id } %>
       </li>
     <% end %>
   </ul>
 <% else %>
   <p>No pending friend requests</p>
 <% end %>
+

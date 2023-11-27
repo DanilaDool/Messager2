@@ -12,7 +12,7 @@
     <% end %>
     <h1><%= current_user.name %></h1>
     <p><%= current_user.descriptions %></p>
-
+    <p>Друзья: <%= current_user.friends.count %></p>
     <%= link_to 'Редактировать профиль', edit_user_path(current_user), class: 'btn' %>
   </section>
 </main>
