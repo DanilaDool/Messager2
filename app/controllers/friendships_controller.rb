@@ -18,11 +18,17 @@ class FriendshipsController < ApplicationController
     redirect_back fallback_location: root_path
   end
 
+
   def accept
     @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id)
 
     if @friendship && @friendship.status == 'pending'
-      @friendship.update(status: 'accepted')
+      Friendship.transaction do
+        @friendship.update(status: 'accepted')
+
+        reverse_friendship = Friendship.create(requester_id: @friendship.requested_id, requested_id: @friendship.requester_id, status: 'accepted')
+      end
+
       flash[:notice] = 'Запрос на дружбу принят'
     else
       flash[:alert] = 'Невозможно принять запрос на дружбу'
@@ -35,7 +41,7 @@ class FriendshipsController < ApplicationController
   def reject
     @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id)
 
-    if @friendship && @friendship.pending?
+    if @friendship && @friendship.status == 'pending'
       @friendship.update(status: 'rejected')
       flash[:notice] = 'Запрос на дружбу отклонен'
     else
@@ -44,4 +50,5 @@ class FriendshipsController < ApplicationController
 
     redirect_back fallback_location: root_path
   end
+
 end
