@@ -1,17 +1,20 @@
-<h1>Requests for Friendship</h1>
+<div class="content-wrapper buffer-both text-center">
+  <div class="buffer-both">
+    <h1 class="title-medium">Запросы на дружбу</h1>
+  </div>
 
 <% if @friend_requests.any? %>
   <ul>
     <% @friend_requests.each do |friend_request| %>
       <li>
         <%= "From: #{friend_request.requester.name}" %>
-        <%= button_to 'Accept', accept_friendship_path(friend_request), method: :patch, remote: true, class: 'accept-friendship-link', data: { friendship_id: friend_request.id } %>
-        <%= button_to 'Reject', reject_friendship_path(friend_request), method: :patch, remote: true, class: 'reject-friendship-link', data: { friendship_id: friend_request.id } %>
+        <%= button_to 'Принять', accept_friendship_path(friend_request), method: :patch, remote: true, class: 'accept-friendship-link', data: { friendship_id: friend_request.id } %>
+        <%= button_to 'Отклонить', reject_friendship_path(friend_request), method: :patch, remote: true, class: 'reject-friendship-link', data: { friendship_id: friend_request.id } %>
       </li>
     <% end %>
   </ul>
 <% else %>
-  <p>No pending friend requests</p>
+  <p>Нету запросов на дружбу</p>
 <% end %>
 
-
+</div>

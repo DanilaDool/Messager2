@@ -2,22 +2,34 @@ class FriendshipsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @users = User.all
+    @users = User.where.not(id: current_user.id)
     @current_user = current_user
   end
 
   def create
-    @friendship = Friendship.new(requester_id: current_user.id, requested_id: params[:friendship][:requested_id], status: 'pending')
+    requested_user = User.find(params[:friendship][:requested_id])
 
-    if @friendship.save
-      flash[:notice] = 'Запрос на дружбу отправлен'
+    if current_user.friends.include?(requested_user)
+      flash[:alert] = 'Этот пользователь уже ваш друг'
+      redirect_back fallback_location: root_path
+    elsif current_user.requested_friendships.exists?(requested_id: requested_user.id, status: 'rejected')
+      @friendship = Friendship.new(requester_id: current_user.id, requested_id: requested_user.id, status: 'pending')
+
+      if @friendship.save
+        flash[:notice] = 'Запрос на дружбу отправлен'
+      else
+        flash[:alert] = 'Не удалось отправить запрос на дружбу'
+      end
+
+      redirect_back fallback_location: root_path
+    elsif current_user.pending_friend_requests.exists?(requested_id: requested_user.id)
+      flash[:alert] = 'Запрос на дружбу уже был отправлен'
+      redirect_back fallback_location: root_path
     else
-      flash[:alert] = 'Не удалось отправить запрос на дружбу'
+      flash[:alert] = 'Невозможно отправить запрос на дружбу'
+      redirect_back fallback_location: root_path
     end
-
-    redirect_back fallback_location: root_path
   end
-
 
   def accept
     @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id)

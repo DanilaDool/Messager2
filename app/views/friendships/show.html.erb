@@ -4,7 +4,7 @@
   </div>
   <div class="user-avatars-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
     <% @users.each do |user| %>
-      <% next if user == current_user %> <!-- Исключаем текущего пользователя из списка -->
+      <% next if user == current_user %>
       <div class="users-list-item">
         <div class="user-image-div user-image-div-small" style="margin: 10px;">
           <% if user.avatar? %>
@@ -14,12 +14,30 @@
           <% end %>
           <p><%= user.name %></p>
 
-          <% unless current_user.pending_friend_requests.exists?(requester_id: user.id) %>
-            <%= form_with(model: Friendship.new, url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
-              <%= form.hidden_field :requested_id, value: user.id %>
-              <%= form.submit 'Добавить в друзья', class: 'btn btn-dark' %>
+          <% if current_user.friends.include?(user) %>
+            <button type="button" class="btn btn-dark">Вы уже друзья</button>
+          <% else %>
+            <% requested_friendship = current_user.requested_friendships.find_by(requested_id: user.id) %>
+            <% if requested_friendship.present? %>
+              <% if requested_friendship.status == 'accepted' %>
+                <button type="button" class="btn btn-dark">Вы уже друзья</button>
+              <% elsif requested_friendship.status == 'rejected' %>
+                <%= form_with(model: Friendship.new, url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
+                  <%= form.hidden_field :requested_id, value: user.id %>
+                  <%= form.submit 'Добавить в друзья', class: 'btn btn-dark' %>
+                <% end %>
+              <% else %>
+                <button type="button" class="btn btn-dark" disabled>Запрос отправлен</button>
+              <% end %>
+            <% else %>
+              <%= form_with(model: Friendship.new, url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
+                <%= form.hidden_field :requested_id, value: user.id %>
+                <% button_text = current_user.pending_friend_requests.exists?(requested_id: user.id) ? 'Запрос отправлен' : 'Добавить в друзья' %>
+                <%= form.submit button_text, class: 'btn btn-dark', disabled: current_user.pending_friend_requests.exists?(requested_id: user.id) %>
+              <% end %>
             <% end %>
           <% end %>
+
         </div>
       </div>
     <% end %>
@@ -27,7 +45,54 @@
 </div>
 
 
+
 <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const friendshipForms = document.querySelectorAll('.friendship-form');
+
+        friendshipForms.forEach(form => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                // Найти кнопку отправки внутри формы
+                const submitButton = form.querySelector('input[type="submit"]');
+
+                // Проверить, заблокирована ли кнопка
+                if (submitButton.disabled) {
+                    return; // Если кнопка заблокирована, не выполнять дальнейшие действия
+                }
+
+                try {
+                    // Заблокировать кнопку перед отправкой запроса
+                    submitButton.disabled = true;
+
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: new FormData(form),
+                        headers: {
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Изменить текст и заблокировать кнопку после успешной отправки запроса на дружбу
+                        submitButton.value = 'Запрос отправлен';
+                        submitButton.disabled = true;
+                    } else {
+                        // Разблокировать кнопку в случае ошибки при отправке запроса
+                        submitButton.disabled = false;
+                        console.error('Ошибка при отправке запроса на сервер');
+                    }
+                } catch (error) {
+                    // Разблокировать кнопку в случае ошибки соединения
+                    submitButton.disabled = false;
+                    console.error(error);
+                }
+            });
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         const acceptLinks = document.querySelectorAll('.accept-friendship-link');
         const rejectLinks = document.querySelectorAll('.reject-friendship-link');
