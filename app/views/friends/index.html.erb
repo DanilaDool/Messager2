@@ -1,0 +1,25 @@
+<div class="content-wrapper buffer-both text-center">
+
+  <button type="button" class="btn btn-dark btn-lg butt"><a href="friends" style="text-decoration: none; color: inherit;">Запросы</a></button>
+  <button type="button" class="btn btn-dark btn-lg butt"><a href="friend_show" style="text-decoration: none; color: inherit;">Друзья</a></button>
+
+
+  <div class="buffer-both">
+    <h1 class="title-medium">Ваши друзья</h1>
+    <div class="user-avatars-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <% current_user.friends.each do |friend| %>
+        <div class="users-list-item">
+          <div class="user-image-div user-image-div-small" style="margin: 10px;">
+            <% if friend.avatar? %>
+              <%= image_tag friend.avatar.thumb.url, alt: "#{friend.name}'s аватар", class: "rounded-avatar" %>
+            <% else %>
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка" class="rounded-avatar" height="100px" width="100px">
+            <% end %>
+            <p><%= friend.name %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

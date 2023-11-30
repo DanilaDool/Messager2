@@ -1,23 +1,25 @@
 <% if current_user %>
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html>
   <body>
 
-    <div class="header">
-      <div class="search-bar">
-        <input type="text" placeholder="Найти друга">
-      </div>
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" placeholder="Найти друга">
     </div>
+  </div>
 
-      <div class="chat-list">
-        <div class="chat">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка" class="rounded-avatar" height="100px" width="100px">
-          <div class="chat-info">
-            <h3>Петя</h3>
-            <p>Последнее сообщение в чате</p>
-          </div>
+  <div class="chat-list">
+    <% current_user.friends.each do |friend| %>
+      <div class="chat">
+        <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
+        <div class="chat-info">
+          <h3><%= friend.name %></h3>
+          <p>Последнее сообщение в чате</p>
         </div>
       </div>
+    <% end %>
+  </div>
   </body>
   </html>
 

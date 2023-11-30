@@ -24,4 +24,5 @@ Rails.application.routes.draw do
 
   get 'friendship_status', to: 'friendships#show', as: :friendship_status
   get 'friends', to: 'friends#show', as: :friend
+  get 'friend_show', to: 'friends#index', as: :friend_show
 end

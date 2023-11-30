@@ -6,14 +6,22 @@ class FriendshipsController < ApplicationController
     @current_user = current_user
   end
 
+  def index
+    @users = User.where.not(id: current_user.id)
+    @current_user = current_user
+  end
+
   def create
     requested_user = User.find(params[:friendship][:requested_id])
 
     if current_user.friends.include?(requested_user)
       flash[:alert] = 'Этот пользователь уже ваш друг'
       redirect_back fallback_location: root_path
-    elsif current_user.requested_friendships.exists?(requested_id: requested_user.id, status: 'rejected')
-      @friendship = Friendship.new(requester_id: current_user.id, requested_id: requested_user.id, status: 'pending')
+    elsif current_user.pending_friend_requests.exists?(requested_id: requested_user.id)
+      flash[:alert] = 'Запрос на дружбу уже был отправлен'
+      redirect_back fallback_location: root_path
+    else
+      @friendship = Friendship.new(requester_id: current_user.id, requested_id: requested_user.id, status: 'pending', sent_request: true)
 
       if @friendship.save
         flash[:notice] = 'Запрос на дружбу отправлен'
@@ -22,32 +30,36 @@ class FriendshipsController < ApplicationController
       end
 
       redirect_back fallback_location: root_path
-    elsif current_user.pending_friend_requests.exists?(requested_id: requested_user.id)
-      flash[:alert] = 'Запрос на дружбу уже был отправлен'
-      redirect_back fallback_location: root_path
-    else
-      flash[:alert] = 'Невозможно отправить запрос на дружбу'
-      redirect_back fallback_location: root_path
     end
   end
 
   def accept
-    @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id)
+    @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id, status: 'pending')
 
-    if @friendship && @friendship.status == 'pending'
-      Friendship.transaction do
-        @friendship.update(status: 'accepted')
+    if @friendship
+      if @friendship.status == 'pending'
+        Friendship.transaction do
+          @friendship.update(status: 'accepted')
 
-        reverse_friendship = Friendship.create(requester_id: @friendship.requested_id, requested_id: @friendship.requester_id, status: 'accepted')
+          # Отменяем все остальные запросы от этого пользователя,
+          # которые имеют статус 'pending'
+          Friendship.where(requester_id: @friendship.requester_id, requested_id: @friendship.requested_id, status: 'pending')
+                    .where.not(id: @friendship.id)
+                    .update_all(status: 'rejected')
+
+          reverse_friendship = Friendship.create(requester_id: @friendship.requested_id, requested_id: @friendship.requester_id, status: 'accepted')
+          flash[:notice] = 'Запрос на дружбу принят'
+        end
+      else
+        flash[:alert] = 'Запрос на дружбу уже принят'
       end
-
-      flash[:notice] = 'Запрос на дружбу принят'
     else
       flash[:alert] = 'Невозможно принять запрос на дружбу'
     end
 
     redirect_back fallback_location: root_path
   end
+
 
 
   def reject

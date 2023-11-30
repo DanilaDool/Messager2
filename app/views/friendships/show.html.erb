@@ -16,6 +16,8 @@
 
           <% if current_user.friends.include?(user) %>
             <button type="button" class="btn btn-dark">Вы уже друзья</button>
+          <% elsif current_user.pending_friend_requests.exists?(requested_id: user.id) %>
+            <button type="button" class="btn btn-dark" disabled>Запрос отправлен</button>
           <% else %>
             <% requested_friendship = current_user.requested_friendships.find_by(requested_id: user.id) %>
             <% if requested_friendship.present? %>
@@ -26,14 +28,13 @@
                   <%= form.hidden_field :requested_id, value: user.id %>
                   <%= form.submit 'Добавить в друзья', class: 'btn btn-dark' %>
                 <% end %>
-              <% else %>
+              <% elsif current_user.pending_friend_requests.exists?(requested_id: user.id) %>
                 <button type="button" class="btn btn-dark" disabled>Запрос отправлен</button>
               <% end %>
             <% else %>
               <%= form_with(model: Friendship.new, url: friendships_path, method: :post, class: 'friendship-form') do |form| %>
                 <%= form.hidden_field :requested_id, value: user.id %>
-                <% button_text = current_user.pending_friend_requests.exists?(requested_id: user.id) ? 'Запрос отправлен' : 'Добавить в друзья' %>
-                <%= form.submit button_text, class: 'btn btn-dark', disabled: current_user.pending_friend_requests.exists?(requested_id: user.id) %>
+                <%= form.submit current_user.pending_friend_requests.exists?(requested_id: user.id) ? 'Запрос отправлен' : 'Добавить в друзья', class: 'btn btn-dark' %>
               <% end %>
             <% end %>
           <% end %>
@@ -43,7 +44,6 @@
     <% end %>
   </div>
 </div>
-
 
 
 <script>
