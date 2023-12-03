@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :requested_friends, through: :requested_friendships, source: :requested
   has_many :received_friends, through: :received_friendships, source: :requester
   has_many :rooms, dependent: :destroy
+  has_many :messages, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
