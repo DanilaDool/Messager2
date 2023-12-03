@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :received_friendships, foreign_key: :requested_id, class_name: 'Friendship'
   has_many :requested_friends, through: :requested_friendships, source: :requested
   has_many :received_friends, through: :received_friendships, source: :requester
+  has_many :rooms, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
