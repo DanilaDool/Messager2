@@ -1,0 +1,11 @@
+<%= turbo_stream_from @room %>
+
+<%= turbo_frame_tag :messages do %>
+  <%= render @messages %>
+<%end %>
+
+<%= form_with model: @new_message do |f| %>
+  <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message" %>
+
+  <%= f.hidden_field :room_id, value: @room.id%>
+<%end %>
