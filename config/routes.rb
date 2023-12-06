@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-
   devise_for :users
+
+  get 'rooms/index'
+
+  resources :rooms, only: [:create, :show], param: :title
 
   devise_scope :user do
     get '/logout', to: 'devise/sessions#destroy', as: :logout

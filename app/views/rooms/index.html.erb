@@ -1,0 +1,10 @@
+<%= turbo_stream_from :rooms %>
+<%= turbo_frame_tag :rooms do %>
+  <%= render @rooms %>
+<%end %>
+
+<%if current_user %>
+  <%= form_with model: @new_room do |f| %>
+    <%= f.submit "New Room" %>
+  <% end %>
+<% end %>

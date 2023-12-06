@@ -5,6 +5,10 @@ ruby "3.2.2"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.2"
 
+gem 'hotwire-rails'
+
+gem 'turbolinks', '~> 5'
+
 gem 'bootstrap'
 
 gem 'followability'
