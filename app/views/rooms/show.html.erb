@@ -1,11 +1,31 @@
 <%= turbo_stream_from @room %>
 
-<%= turbo_frame_tag :messages do %>
-  <%= render @messages %>
-<%end %>
+<div id="chat-messages" class="chat-messages">
+  <%= turbo_frame_tag :messages do %>
+    <% @messages.each do |message| %>
+      <%= render partial: 'messages/message', locals: { message: message } %>
+    <% end %>
+  <% end %>
+</div>
 
-<%= form_with model: @new_message do |f| %>
-  <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message" %>
+<%= form_with model: @new_message, id: "new_message_form", data: { controller: "message-form" } do |f| %>
+  <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message", id: "message_body" %>
+  <%= f.hidden_field :room_id, value: @room.id %>
+<% end %>
 
-  <%= f.hidden_field :room_id, value: @room.id%>
-<%end %>
+<script>
+    const chatMessages = document.getElementById('chat-messages');
+
+    function scrollChatToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    scrollChatToBottom();
+
+    document.addEventListener('turbo:submit-end', (event) => {
+        const form = event.target;
+        if (form && form.getAttribute('id') === 'new_message_form') {
+            document.getElementById('message_body').value = ''; // Очистить поле ввода после отправки сообщения
+        }
+    });
+</script>
