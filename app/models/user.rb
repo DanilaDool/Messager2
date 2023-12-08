@@ -6,8 +6,11 @@ class User < ApplicationRecord
   has_many :rooms, dependent: :destroy
   has_many :messages, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_and_belongs_to_many :rooms
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
 
   mount_uploader :avatar, AvatarUploader
 
