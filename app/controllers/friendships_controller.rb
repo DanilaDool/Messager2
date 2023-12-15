@@ -47,7 +47,7 @@ class FriendshipsController < ApplicationController
                     .where.not(id: @friendship.id)
                     .update_all(status: 'rejected')
 
-          create_room_for_friendship(@friendship.requester_id, @friendship.requested_id)
+          @friendship.create_room_for_friendship(@friendship.requester_id, @friendship.requested_id)
 
           reverse_friendship = Friendship.create(requester_id: @friendship.requested_id, requested_id: @friendship.requester_id, status: 'accepted')
           flash[:notice] = 'Запрос на дружбу принят'
@@ -62,8 +62,6 @@ class FriendshipsController < ApplicationController
     redirect_back fallback_location: root_path
   end
 
-
-
   def reject
     @friendship = Friendship.find_by(id: params[:id], requested_id: current_user.id)
 
@@ -75,13 +73,6 @@ class FriendshipsController < ApplicationController
     end
 
     redirect_back fallback_location: root_path
-  end
-
-  private
-
-  def create_room_for_friendship(user_id1, user_id2)
-    room = Room.create(user_id: user_id1, title: "Room_#{SecureRandom.hex(3)}")
-    room.users << [User.find(user_id1), User.find(user_id2)]
   end
 
 end

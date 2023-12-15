@@ -11,13 +11,18 @@
 
   <div class="chat-list">
     <% current_user.friends.each do |friend| %>
-      <div class="chat">
-        <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
-        <div class="chat-info">
-          <h3><%= friend.name %></h3>
-          <p>Последнее сообщение в чате</p>
-        </div>
-      </div>
+      <% friend.rooms.each do |room| %>
+        <% if room.users.include?(current_user) %>
+          <div class="chat">
+            <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
+            <div class="chat-info">
+              <h3><%= friend.name %></h3>
+              <p>Последнее сообщение в чате</p>
+              <p><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
   </body>

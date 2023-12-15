@@ -1,10 +1,15 @@
 <%= turbo_stream_from :rooms %>
 <%= turbo_frame_tag :rooms do %>
-  <%= render @rooms %>
-<%end %>
+    <%= render @rooms %>
+  <%end %>
 
-<%if current_user %>
-  <%= form_with model: @new_room do |f| %>
+  <%if current_user %>
+    <%= form_with model: @new_room do |f| %>
     <%= f.submit "New Room" %>
   <% end %>
+
+  <% @rooms.each do |room| %>
+    <p><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
+  <% end %>
+
 <% end %>

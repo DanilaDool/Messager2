@@ -21,4 +21,5 @@ class User < ApplicationRecord
   def friends
     received_friends.where(friendships: { status: 'accepted' })
   end
+
 end
