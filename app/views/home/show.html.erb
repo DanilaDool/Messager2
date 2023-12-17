@@ -3,33 +3,40 @@
   <html>
   <body>
 
-  <div class="header">
-    <div class="search-bar">
-      <input type="text" placeholder="Найти друга">
-    </div>
-  </div>
-
   <div class="chat-list">
-    <% current_user.friends.each do |friend| %>
-      <% friend.rooms.each do |room| %>
-        <% if room.users.include?(current_user) %>
-          <div class="chat">
-            <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
-            <div class="chat-info">
-              <h3><%= friend.name %></h3>
-              <p>Последнее сообщение в чате</p>
-              <p><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
+    <% if current_user.friends.any? %>
+      <% current_user.friends.each do |friend| %>
+        <% friend.rooms.each do |room| %>
+          <% if room.users.include?(current_user) %>
+            <div class="chat">
+              <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
+              <div class="chat-info">
+                <h3><%= friend.name %></h3>
+                <% message_content = friend.messages.last.body %>
+                <% if message_content.length > 25 %>
+                  <% message_content = message_content.truncate(10) %>
+                <% end %>
+                <p><%= friend.name %>:<%= message_content %></p>
+                <p class="room"><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
+              </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
       <% end %>
+    <%else %>
+      <div class="indent">
+      <div class="text-center">
+        <h3 class="my-auto">У вас пока нету друзей :(</h3>
+      </div>
+      </div>
     <% end %>
   </div>
+
   </body>
   </html>
 
 <% else %>
-  <div class="nocurrent">
+  <div class="indent">
     <div class="text-center">
       <h3 class="my-auto">Вы не зарегистрированы</h3>
     </div>

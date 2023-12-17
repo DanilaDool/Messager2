@@ -1,17 +1,30 @@
-<%= turbo_stream_from @room %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+</head>
+<body>
 
-<div id="chat-messages" class="chat-messages">
-  <%= turbo_frame_tag :messages do %>
-    <% @messages.each do |message| %>
-      <%= render partial: 'messages/message', locals: { message: message } %>
+<div class="container">
+  <%= turbo_stream_from @room %>
+
+  <div class="chat-container">
+    <div id="chat-messages" class="chat-messages">
+      <%= turbo_frame_tag :messages do %>
+        <% @messages.each do |message| %>
+          <%= render partial: 'messages/message', locals: { message: message } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= form_with model: @new_message, id: "new_message_form", data: { controller: "message-form" } do |f| %>
+      <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message", id: "message_body" %>
+      <%= f.hidden_field :room_id, value: @room.id %>
     <% end %>
-  <% end %>
-</div>
 
-<%= form_with model: @new_message, id: "new_message_form", data: { controller: "message-form" } do |f| %>
-  <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message", id: "message_body" %>
-  <%= f.hidden_field :room_id, value: @room.id %>
-<% end %>
+  </div>
+</div>
 
 <script>
     const chatMessages = document.getElementById('chat-messages');
@@ -28,4 +41,24 @@
             document.getElementById('message_body').value = ''; // Очистить поле ввода после отправки сообщения
         }
     });
+
+    // Функция для прокрутки чата вниз
+    function scrollChatToBottom() {
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Прокрутить чат вниз при загрузке страницы
+    scrollChatToBottom();
+
+    document.addEventListener('turbo:submit-end', (event) => {
+        const form = event.target;
+        if (form && form.getAttribute('id') === 'new_message_form') {
+            document.getElementById('message_body').value = ''; // Очистить поле ввода после отправки сообщения
+        }
+    });
+
 </script>
+
+</body>
+</html>

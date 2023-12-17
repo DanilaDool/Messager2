@@ -1,9 +1,5 @@
 <div class="message">
 
-  <%= l(message.created_at, format: :short) %>
-
-  <%= message.user.name %>
-
-  <%= message.body %>
+  <%= message.user.name %> - <%= message.body %>
 
 </div>

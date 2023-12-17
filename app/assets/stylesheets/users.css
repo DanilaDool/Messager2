@@ -34,6 +34,11 @@ nav ul li a {
     color: #fff;
 }
 
+nav ul li a:hover {
+    color: grey; /* Изменение цвета текста при наведении на ссылку */
+}
+
+
 /* ... (ваш существующий CSS) */
 
 
@@ -94,4 +99,8 @@ footer {
 
 .user-image-div {
     text-align: center;
+}
+
+.indent {
+ margin-top: 300px;
 }

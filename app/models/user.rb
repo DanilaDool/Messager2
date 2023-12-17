@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+
   has_many :requested_friendships, foreign_key: :requester_id, class_name: 'Friendship'
   has_many :received_friendships, foreign_key: :requested_id, class_name: 'Friendship'
   has_many :requested_friends, through: :requested_friendships, source: :requested
@@ -8,9 +11,9 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_and_belongs_to_many :rooms
 
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  before_validation :set_default_name, on: :create
 
+  validates :name, presence: true
 
   mount_uploader :avatar, AvatarUploader
 
@@ -21,5 +24,12 @@ class User < ApplicationRecord
   def friends
     received_friends.where(friendships: { status: 'accepted' })
   end
+
+  private
+
+  def set_default_name
+    self.name ||= "User-#{SecureRandom.hex(3)}"
+  end
+
 
 end

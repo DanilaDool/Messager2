@@ -18,7 +18,12 @@
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #000000;
     color: #fff;
     cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #666666;
+    color: #fff;
 }

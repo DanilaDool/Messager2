@@ -1,4 +1,10 @@
 .butt {
     margin-top: 10px;
-margin-bottom: 10px
+    margin-bottom: 10px
+}
+
+.room a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Задаем цвет, соответствующий цвету текста родительского элемента */
+    cursor: default; /* Изменяем вид курсора на обычный текстовый */
 }

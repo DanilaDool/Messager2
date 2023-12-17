@@ -16,10 +16,10 @@
   <nav>
     <ul>
       <% if current_user %>
-        <li><a href="/">Главная</a></li>
+        <li><%= link_to 'Главная', root_path(current_user) %></li>
         <li><%= link_to 'Профиль', user_profile_path(current_user) %></li>
-        <li><a href="friendship_status">Найти Друзей</a></li>
-        <li><a href="friends">Друзья</a></li>
+        <li><%= link_to 'Найти Друзей', friendship_status_path(current_user) %></li>
+        <li><%= link_to 'Друзья', friend_path(current_user) %></li>
       <% else %>
         <li><%= link_to 'Зарегистрироваться', new_user_registration_path %></li>
         <li><%= link_to 'Войти', new_user_session_path %></li>
