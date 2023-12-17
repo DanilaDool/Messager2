@@ -23,32 +23,26 @@
       <%= f.hidden_field :room_id, value: @room.id %>
     <% end %>
 
+
   </div>
 </div>
 
 <script>
-    const chatMessages = document.getElementById('chat-messages');
-
-    function scrollChatToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    scrollChatToBottom();
-
     document.addEventListener('turbo:submit-end', (event) => {
         const form = event.target;
         if (form && form.getAttribute('id') === 'new_message_form') {
+            const formElement = document.getElementById('new_message_form');
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+
             document.getElementById('message_body').value = ''; // Очистить поле ввода после отправки сообщения
         }
     });
 
-    // Функция для прокрутки чата вниз
     function scrollChatToBottom() {
         const chatMessages = document.getElementById('chat-messages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Прокрутить чат вниз при загрузке страницы
     scrollChatToBottom();
 
     document.addEventListener('turbo:submit-end', (event) => {

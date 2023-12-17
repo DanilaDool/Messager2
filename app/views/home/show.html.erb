@@ -12,11 +12,15 @@
               <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
               <div class="chat-info">
                 <h3><%= friend.name %></h3>
-                <% message_content = friend.messages.last.body %>
+                <% if friend.messages.any? %>
+                  <% message_content = friend.messages.last.body %>
+                <%else %>
+                  <% message_content = "Нету сообщений" %>
+                <%end %>
                 <% if message_content.length > 25 %>
                   <% message_content = message_content.truncate(10) %>
                 <% end %>
-                <p><%= friend.name %>:<%= message_content %></p>
+                <p><%= friend.name %> - <%= message_content %></p>
                 <p class="room"><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
               </div>
             </div>
