@@ -19,6 +19,8 @@ gem "sassc-rails"
 
 gem 'carrierwave'
 
+gem 'redis'
+
 gem 'rmagick'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
