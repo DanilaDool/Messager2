@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_04_213626) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_19_152739) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "friends", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,8 +35,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_213626) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "message_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "message_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["message_id"], name: "index_likes_on_message_id"
@@ -42,8 +45,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_213626) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "room_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "room_id", null: false
     t.string "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -53,12 +56,20 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_213626) do
   end
 
   create_table "rooms", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["title"], name: "index_rooms_on_title"
     t.index ["user_id"], name: "index_rooms_on_user_id"
+  end
+
+  create_table "rooms_users", id: false, force: :cascade do |t|
+    t.bigint "room_id"
+    t.bigint "user_id"
+    t.index ["room_id", "user_id"], name: "index_rooms_users_on_room_id_and_user_id", unique: true
+    t.index ["room_id"], name: "index_rooms_users_on_room_id"
+    t.index ["user_id"], name: "index_rooms_users_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
