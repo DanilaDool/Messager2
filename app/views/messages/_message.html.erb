@@ -1,5 +1,7 @@
-<div class="message">
+ <div class="message">
+    <p><%= message.user.name %> - <%= message.body %></p>
+    <% if message.image? %>
+      <%= image_tag message.image.thumb.url %>
+    <% end %>
+  </div>
 
-  <%= message.user.name %> - <%= message.body %>
-
-</div>

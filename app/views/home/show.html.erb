@@ -9,13 +9,11 @@
         <% friend.rooms.each do |room| %>
           <% if room.users.include?(current_user) %>
             <div class="chat">
-
               <% if friend.avatar? %>
                 <img src="<%= friend.avatar_url %>" alt="<%= friend.name %>" class="rounded-avatar" height="100px" width="100px">
               <% else %>
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSiylwVA6PW_GnlrPL-UmN7zPcmtnzPqXSVExvXbpPQ&s" alt="заглушка">
               <%end %>
-
               <div class="chat-info">
                 <h3><%= friend.name %></h3>
                 <% if friend.messages.any? %>
@@ -29,7 +27,6 @@
                 <p><%= friend.name %> - <%= message_content %></p>
                 <p class="room"><%= link_to "Перейти в комнату #{room.title}", room_link(room.title) %></p>
               </div>
-
             </div>
           <% end %>
         <% end %>

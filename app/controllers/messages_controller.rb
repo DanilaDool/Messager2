@@ -1,8 +1,8 @@
 class MessagesController < ApplicationController
 
   def create
-    @new_message = current_user&.messages&.build(strong_params)
-    if @new_message&.save
+    @new_message = current_user.messages.build(strong_params)
+    if @new_message.save
       @new_message.broadcast_append_to @new_message.room
     end
   end
@@ -10,6 +10,6 @@ class MessagesController < ApplicationController
   private
 
   def strong_params
-    params.require(:message).permit(:room_id, :body)
+    params.require(:message).permit(:room_id, :body, :image)
   end
 end

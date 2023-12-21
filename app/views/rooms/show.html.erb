@@ -18,11 +18,18 @@
       <% end %>
     </div>
 
-    <%= form_with model: @new_message, id: "new_message_form", data: { controller: "message-form" } do |f| %>
-      <%= f.text_field :body, autofocus: true, required: true, placeholder: "Your message", id: "message_body" %>
+    <%= form_with model: @new_message, html: {multipart: true}, id: "new_message_form", data: { controller: "message-form" } do |f| %>
+      <%= f.text_field :body, autofocus: true, placeholder: "Your message", id: "message_body" %>
       <%= f.hidden_field :room_id, value: @room.id %>
-    <% end %>
 
+      <div class="file-upload">
+        <%= f.file_field :image, id: "upload-image" %>
+        <label for="upload-image">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Breezeicons-actions-22-mail-attachment.svg/2048px-Breezeicons-actions-22-mail-attachment.svg.png" class="paper_clip" height="30px" width="30px">
+        </label>
+      </div>
+      <%= f.submit "Отправить", class: "btn_chat btn btn-secondary" %>
+    <% end %>
 
   </div>
 </div>
@@ -35,6 +42,7 @@
             formElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
 
             document.getElementById('message_body').value = ''; // Очистить поле ввода после отправки сообщения
+            document.getElementById('upload-image').value = null; // Очистить поле с изображением после отправки
         }
     });
 

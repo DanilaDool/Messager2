@@ -27,3 +27,23 @@
     background-color: #666666;
     color: #fff;
 }
+
+.file-upload {
+    position: relative;
+    display: inline-block;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload img {
+    cursor: pointer;
+}
+
+.file-upload img:hover {
+}
+
+.btn_chat {
+    margin-top: 15px;
+}
